@@ -52,17 +52,9 @@
     </div><!-- /.container-fluid -->
     </nav>
     <div class='container'>
-      <?php switch ($warning) {
-        case 'error1':?>
-          <div class="alert alert-info" role="alert">登入失敗，帳號密碼有誤</div>
-        <?php break;
-        case 'error2':?>
-        <div class="alert alert-info" role="alert">填寫資料有誤</div>
-        <?php break;
-        default:
-
-          break;
-      }?>
+      <?php if($message = $this->session->flashdata('message')){?>
+        <div class="alert alert-info" role="alert"><?php echo $message; ?></div>
+      <?php } ?>
 
 
       <div class='row'>

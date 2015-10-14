@@ -8,7 +8,6 @@ class Platform extends CI_Controller {
   public function login(){
     $data['user_login'] = $this->session->userdata('user_login');
     $data['warning'] = '';
-
     $this->load->view('login',$data);
   }
   public function login_post(){
@@ -23,28 +22,29 @@ class Platform extends CI_Controller {
       if($data['user']){
         $this->session->set_userdata('user_login','YES',86500);
         $this->session->set_userdata('user_id',$data['user']->id,86500);
+        $this->session->set_flashdata('message','登入成功');
         redirect('');
       }else{
-        $data['warning'] = 'error1';
+        $this->session->set_flashdata('message','登入失敗，帳號密碼有誤');
+        redirect('platform/login');
       }
     }else{
-      $data['warning'] = 'error2';
+      $this->session->set_flashdata('message','資料填寫錯誤');
+      redirect('platform/login');
     }
-    $data['user_login'] = $this->session->userdata('user_login');
-    $this->load->view('login',$data);
+    // $data['user_login'] = $this->session->userdata('user_login');
+    // $this->load->view('welcome_message',$data);
+
   }
 
   public function logout(){
     $this->session->unset_userdata('user_id');
     $this->session->unset_userdata('user_login');
-    $data['user_login'] = $this->session->userdata('user_login');
-    $data['message'] = 'message2';
+    $this->session->set_flashdata('message','登出成功');
     redirect('');
-    $this->load->view('welcome_message',$data);
   }
   public function register(){
-    $data['warning'] = '';
-    $this->load->view('register',$data);
+    $this->load->view('register');
   }
   public function register_post(){
     $data['name'] = $this->input->post('name');
@@ -54,13 +54,17 @@ class Platform extends CI_Controller {
     if($data['name'] && $data['account'] && $data['password'] && $repassword){
       if($data['password'] == $repassword){
         $this->user->register($data);
+        $this->session->set_flashdata('message','註冊成功，快登入吧！');
         redirect('platform/login');
       }else{
-        $data['warning'] = 'error1';
+        $this->session->set_flashdata('message','密碼確認有誤');
+        redirect('platform/register');
       }
     }else{
-      $data['warning'] = 'error2';
+      $this->session->set_flashdata('message','資料填寫有誤');
+      redirect('platform/register');
     }
+
   }
 
 }

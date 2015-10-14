@@ -58,17 +58,9 @@
 	  </div><!-- /.container-fluid -->
 		</nav>
 		<div class='container'>
-			<?php switch ($message) {
-        case 'message1':?>
-          <div class="alert alert-info" role="alert">登入成功</div>
-        <?php break;
-        case 'message2':?>
-        <div class="alert alert-info" role="alert">登出成功</div>
-        <?php break;
-        default:
-
-          break;
-      }?>
+			<?php if($message = $this->session->flashdata('message')){?>
+        <div class="alert alert-info" role="alert"><?php echo $message ?></div>
+      <?php } ?>
 			<div class="page-header">
 			  <h1>首頁<small>動態練習</small></h1>
 			</div>

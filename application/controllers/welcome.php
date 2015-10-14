@@ -10,13 +10,6 @@ class Welcome extends CI_Controller {
 	{	$user_id = $this->session->userdata('user_id');
 		$data['user'] = $this->user->get_user_by_id($user_id);
 		$data['user_login'] = $this->session->userdata('user_login');
-		$data['message'] = '';
-		if($data['user_login']){
-			$data['message'] = 'message1';
-		}else{
-			$data['message'] = 'message2';
-		}
-
 		$this->load->view('welcome_message',$data);
 	}
 }
