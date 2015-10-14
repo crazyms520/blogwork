@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>會員登入</title>
+    <title>帳號註冊</title>
     <!-- 最新編譯和最佳化的 CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -35,24 +35,16 @@
           <li><a href="#">我的朋友</a></li>
           <li><a href="#" >尋找使用者</a></li>
         </ul>
-        <?php if($user_login === 'YES'){?>
         <form class="navbar-form navbar-left" role="search">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
+            <input type="text" class="form-control" name="keyword" placeholder="關鍵字.."  />
           </div>
-
-          <button type="submit" class="btn btn-default">Submit</button>
+          <button type="submit" class="btn btn-default ">搜尋</button>
         </form>
-        <?php }?>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">設定 <span class="caret"></span></a>
-            <?php if($user_login === 'YES'){?>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">個人資料</a></li>
-                <li><a href="#">會員登出</a></li>
-              </ul>
-            <?php }else{ ?>
+
               <ul class="dropdown-menu" role="menu">
                 <?php if($user_login){?>
                   <li><a href="#">個人資料</a></li>
@@ -62,45 +54,51 @@
                   <li><a href="<?php echo site_url('platform/register');?>">註冊帳號</a></li>
               <?php } ?>
             </ul>
-            <?php } ?>
+
           </li>
         </ul>
 
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
     </nav>
-    <div class='container'>
-      <?php if($message = $this->session->flashdata('message')){ ?>
-              <div class="alert alert-info" role="alert"><?php echo $message; ?></div>
-      <?php } ?>
-       <!--<?php if(!$user){ ?>
-        <div class="alert alert-info" role="alert">登入失敗，帳號密碼有誤</div>
-       <?php }?>
-       <?php if(!$warning2){?>
-        <div class="alert alert-info" role="alert">填寫資料有誤</div>
-      <?php } ?>-->
 
-      <div class='row'>
-        <div class='col-md-4'></div>
-        <div class='col-md-4'>
-          <form action='<?php echo site_url('platform/login_post');?>' method='post'>
+    <div class="container">
+      <?php if (!$user_login) { ?>
+        <div class="alert alert-danger" role="alert">請先登入！</div>
+      <?php
+        return;
+      }?>
+      <form action='<?php echo site_url('messages/message_post');?>' method='post'>
+        <div class='form-group'>
 
-            <div class="form-group">
-              <label for="account">輸入帳號</label>
-              <input type="text" class="form-control" name='account' id="account" placeholder="請輸入帳號...">
-            </div>
-            <div class="form-group">
-              <label for="password">輸入密碼</label>
-              <input type="password" class="form-control" name='password' id="password" placeholder="請輸入密碼...">
-            </div>
-            <hr>
-            <div class='form-group text-right'>
-              <button type="submit" class="btn btn-default">確定</button>
-            </div>
-          </form>
+          <label for='content'>輸入動態吧！</label>
+          <textarea class="form-control" rows="3" name='content' placeholder='在想些什麼？'></textarea>
         </div>
-        <div class='col-md-4'></div>
-      </div>
+
+        <div class='form-group text-right'>
+          <button type='submit' class='btn btn-default'>確定</button>
+        </div>
+      </form>
+      <hr>
+      <?php if(!$messages){ ?>
+        <div class="alert alert-warning" role="alert">沒有任何動態！</div>
+      <?php }?>
+      <?php if ($messages){
+        foreach($messages as $message){ ?>
+          <div class="panel panel-default">
+            <div class="panel-heading"></div>
+              <div class="panel-body">
+                <?php echo $message->content; ?>
+              </div>
+              <div class="panel-footer text-right"><?php echo $message->created_at;?></div>
+          </div>
+          </div>
+        <?php } ?>
+      <?php } ?>
     </div>
+
+
+
+
   </body>
 </html>

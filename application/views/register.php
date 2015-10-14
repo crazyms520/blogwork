@@ -41,8 +41,13 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">設定 <span class="caret"></span></a>
 
               <ul class="dropdown-menu" role="menu">
-                <li><a href="<?php echo site_url('platform/login');?>">會員登入</a></li>
-                <li><a href="<?php echo site_url('platform/register');?>">註冊帳號</a></li>
+                <?php if($user_login){?>
+                  <li><a href="#">個人資料</a></li>
+                  <li><a href="<?php echo site_url('platform/logout');?>">會員登出</a></li>
+                <?php }else{ ?>
+                  <li><a href="<?php echo site_url('platform/login'); ?>">會員登入</a></li>
+                  <li><a href="<?php echo site_url('platform/register');?>">註冊帳號</a></li>
+              <?php } ?>
             </ul>
 
           </li>

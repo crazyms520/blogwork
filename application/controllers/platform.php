@@ -7,7 +7,6 @@ class Platform extends CI_Controller {
   }
   public function login(){
     $data['user_login'] = $this->session->userdata('user_login');
-    $data['warning'] = '';
     $this->load->view('login',$data);
   }
   public function login_post(){
