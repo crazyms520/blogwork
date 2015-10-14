@@ -43,8 +43,13 @@
 	        <li class="dropdown">
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">設定 <span class="caret"></span></a>
 	          <ul class="dropdown-menu" role="menu">
-	            <li><a href="<?php echo site_url('platform/login'); ?>">會員登入</a></li>
-	            <li><a href="#">註冊帳號</a></li>
+	          	<?php if($user_login){?>
+	          		<li><a href="#">個人資料</a></li>
+	            	<li><a href="<?php echo site_url('platform/logout');?>">會員登出</a></li>
+	          	<?php }else{ ?>
+	            	<li><a href="<?php echo site_url('platform/login'); ?>">會員登入</a></li>
+	            	<li><a href="<?php echo site_url('platform/register');?>">註冊帳號</a></li>
+	            <?php } ?>
 
 	          </ul>
 	        </li>
@@ -53,13 +58,25 @@
 	  </div><!-- /.container-fluid -->
 		</nav>
 		<div class='container'>
+			<?php switch ($message) {
+        case 'message1':?>
+          <div class="alert alert-info" role="alert">登入成功</div>
+        <?php break;
+        case 'message2':?>
+        <div class="alert alert-info" role="alert">登出成功</div>
+        <?php break;
+        default:
+
+          break;
+      }?>
 			<div class="page-header">
 			  <h1>首頁<small>動態練習</small></h1>
 			</div>
-			<?php if($user_login){
 
+			<?php if($user_login){
+				echo "Hi，".$user->account."(".$user->name.")！";
 		 	}else{
-		 		echo "您尚未登入!";
+		 		echo "您尚未登入！";
 		 	} ?>
 		</div>
 
