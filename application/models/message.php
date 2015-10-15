@@ -19,4 +19,20 @@
       $messages = $this->db->get()->result();
       return $messages;
     }
+
+    public function get_messages_by_keyword($keyword,$per_page,$offset){
+      return $this->db->select('*')
+                      ->like('content',$keyword)
+                      ->limit($per_page,$offset)
+                      ->join('users','messages.user_id = users.id')
+                      ->from('messages')
+                      ->get()
+                      ->result();
+    }
+
+    public function get_total_by_keyword($keyword){
+      $this->db->like('content',$keyword)
+               ->from('messages');
+      return $this->db->count_all_results();
+    }
   }

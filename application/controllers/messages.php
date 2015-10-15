@@ -102,4 +102,76 @@ class Messages extends CI_Controller {
     }
   }
 
+  public function search(){
+    $this->load->library('pagination');
+    $keyword = $this->input->get('keyword');
+    $per_page = $this->input->get('per_page');
+
+    $config['base_url'] = "http://crazyms.com/blogwork/index.php/messages/index?keyword=$keyword";
+    $config['total_rows'] =$this->message->get_total_by_keyword($keyword);
+    $config['per_page'] = 3;
+    $config['page_query_string'] = TRUE;
+    $config['use_page_numbers'] = TRUE;
+    if($per_page){
+        $offset = ($per_page-1) * $config['per_page'];
+      }else{
+        $offset = 0;
+      }
+
+    //此標籤是放在顯示分頁結果的左側。
+    $config['full_tag_open'] = '<ul class="pagination">';
+    //此標籤是放在顯示分頁結果的右側。
+    $config['full_tag_close'] = '</ul>';
+
+    // //分頁左邊顯示"第一頁"的名稱
+    // $config['first_link'] = '第一頁';
+    // //第一頁連結左邊標籤。
+    // $confug['first_tag_open'] = '<li>';
+    // //第一頁連結右邊標籤。
+    // $config['first_tag_close'] = '</li>';
+
+    //分頁中顯示"上一頁"的名稱。
+    $config['prev_link'] = '上一頁';
+    //上一頁連結的左邊標籤。
+    $config['prev_tag_open'] = '<li>';
+    //上一頁連結的右邊標籤。
+    $config['prev_tag_close'] = '</li>';
+
+    //分頁中顯示"下一頁"的名稱。
+    $config['next_link'] = '下一頁';
+    //下一頁連結的左邊標籤。
+    $config['next_tag_open'] = '<li>';
+    //下一頁連結的右邊標籤。
+    $config['next_tag_close'] = '</li>';
+
+    // //分頁右邊顯示"最後頁"的名稱。
+    // $config['last_link'] = '最後頁';
+    // //最後一頁連結左邊標籤。
+    // $config['last_tag_open'] = '<li>';
+    // //最後一頁連結右邊標籤。
+    // $config['last_tag_close'] = '</li>';
+
+    //目前頁面左邊標籤。
+    $config['cur_tag_open'] = '<li class="active"><a href="#">';
+    //目前頁面右邊標籤。
+    $config['cur_tag_close'] = '</li>';
+
+    //分頁數字連結左邊標籤。
+    $config['num_tag_open'] = '<li>';
+    //分頁數字連結右邊標籤。
+    $config['num_tag_close'] = '</li>';
+
+
+
+    $this->pagination->initialize($config);
+    $this->db->limit($config['per_page'],$offset);
+    $data['pagination'] = $this->pagination->create_links();
+    $data['user_login'] = $this->session->userdata('user_login');
+    $data['user_id'] = $this->session->userdata('user_id');
+    if($keyword){
+      $data['messages'] = $this->message->get_messages_by_keyword($keyword,$config['per_page'],$offset);
+      $this->load->view('messages',$data);
+    }
+  }
+
 }
