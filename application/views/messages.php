@@ -68,7 +68,11 @@
       <?php
         return;
       }?>
-      <form action='<?php echo site_url('messages/message_post');?>' method='post'>
+
+      <?php if($message = $this->session->flashdata('message')){?>
+        <div class="alert alert-info" role="alert"><?php echo $message; ?></div>
+      <?php } ?>
+      <form action='<?php echo site_url('messages/messages_post');?>' method='post'>
         <div class='form-group'>
 
           <label for='content'>輸入動態吧！</label>
@@ -86,16 +90,17 @@
       <?php if ($messages){
         foreach($messages as $message){ ?>
           <div class="panel panel-default">
-            <div class="panel-heading"></div>
+            <div class="panel-heading"><?php echo $message->name; ?></div>
               <div class="panel-body">
                 <?php echo $message->content; ?>
               </div>
               <div class="panel-footer text-right"><?php echo $message->created_at;?></div>
           </div>
-          </div>
         <?php } ?>
       <?php } ?>
+      <?php echo $pagination; ?>
     </div>
+
 
 
 

@@ -5,14 +5,18 @@
       parent::__construct();
     }
 
-    public function get_messages_by_id($user_id){
-      return $this->db->where('user_id',$user_id)
-                      ->get('messages')
-                      ->result();
-    }
 
-    public function creatd_message($data){
+    public function creat_message($data){
       $this->db->insert('messages',$data);
+      //Query 輔助函數
+      return $this->db->insert_id();
     }
 
+    public function get_all_messages(){
+      $this->db->select('*');
+      $this->db->from('messages');
+      $this->db->join('users','messages.user_id = users.id');
+      $messages = $this->db->get()->result();
+      return $messages;
+    }
   }
