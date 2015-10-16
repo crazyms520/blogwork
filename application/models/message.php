@@ -14,8 +14,10 @@
 
     public function get_all_messages(){
       $this->db->select('*');
-      $this->db->from('messages');
       $this->db->join('users','messages.user_id = users.id');
+      $this->db->order_by ('messages.id', 'DESC');
+      $this->db->from('messages');
+
       $messages = $this->db->get()->result();
       return $messages;
     }
@@ -25,6 +27,7 @@
                       ->like('content',$keyword)
                       ->limit($per_page,$offset)
                       ->join('users','messages.user_id = users.id')
+                      ->order_by ('messages.id', 'DESC')
                       ->from('messages')
                       ->get()
                       ->result();

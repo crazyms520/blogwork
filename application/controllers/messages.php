@@ -9,10 +9,17 @@ class Messages extends CI_Controller {
   }
   public function index($offset = 0){
     $this->load->library('pagination');
+
+    $keyword = $this->input->get('keyword');
     $per_page = $this->input->get('per_page');
 
-    $config['base_url'] = 'http://crazyms.com/blogwork/index.php/messages/index?';
-    $config['total_rows'] = $this->db->count_all_results('messages');
+    // $config['base_url'] = 'http://crazyms.com/blogwork/index.php/messages/index?';
+    $config['base_url'] = "http://crazyms.com/blogwork/index.php/messages/index?keyword=$keyword";
+    if($keyword){
+      $config['total_rows'] = $this->message->get_total_by_keyword($keyword);
+    }else{
+      $config['total_rows'] = $this->db->count_all_results('messages');
+    }
     $config['per_page'] = 3;
     $config['page_query_string'] = TRUE;
     $config['use_page_numbers'] = TRUE;
@@ -27,12 +34,12 @@ class Messages extends CI_Controller {
     //此標籤是放在顯示分頁結果的右側。
     $config['full_tag_close'] = '</ul>';
 
-    // //分頁左邊顯示"第一頁"的名稱
-    // $config['first_link'] = '第一頁';
-    // //第一頁連結左邊標籤。
-    // $confug['first_tag_open'] = '<li>';
-    // //第一頁連結右邊標籤。
-    // $config['first_tag_close'] = '</li>';
+    //分頁左邊顯示"第一頁"的名稱
+    $config['first_link'] = '第一頁';
+    //第一頁連結左邊標籤。
+    $config['first_tag_open'] = '<li>';
+    //第一頁連結右邊標籤。
+    $config['first_tag_close'] = '</li>';
 
     //分頁中顯示"上一頁"的名稱。
     $config['prev_link'] = '上一頁';
@@ -48,12 +55,12 @@ class Messages extends CI_Controller {
     //下一頁連結的右邊標籤。
     $config['next_tag_close'] = '</li>';
 
-    // //分頁右邊顯示"最後頁"的名稱。
-    // $config['last_link'] = '最後頁';
-    // //最後一頁連結左邊標籤。
-    // $config['last_tag_open'] = '<li>';
-    // //最後一頁連結右邊標籤。
-    // $config['last_tag_close'] = '</li>';
+    //分頁右邊顯示"最後頁"的名稱。
+    $config['last_link'] = '最後頁';
+    //最後一頁連結左邊標籤。
+    $config['last_tag_open'] = '<li>';
+    //最後一頁連結右邊標籤。
+    $config['last_tag_close'] = '</li>';
 
     //目前頁面左邊標籤。
     $config['cur_tag_open'] = '<li class="active"><a href="#">';
@@ -70,17 +77,20 @@ class Messages extends CI_Controller {
     $this->pagination->initialize($config);
     $this->db->limit($config['per_page'],$offset);
     $data['pagination'] = $this->pagination->create_links();
-
-    $data['messages'] = $this->message->get_all_messages();
+    if($keyword){
+      $data['messages'] = $this->message->get_messages_by_keyword($keyword,$config['per_page'],$offset);
+    }else{
+      $data['messages'] = $this->message->get_all_messages();
+    }
+    $data['keyword'] = $keyword;
     $data['user_login'] = $this->session->userdata('user_login');
     $data['user_id'] = $this->session->userdata('user_id');
-
     $this->load->view('messages',$data);
   }
 
   public function messages_post(){
-    $content = $this->input->post('content');
 
+    $content = $this->input->post('content');
     if(!$content){
       $this->session->set_flashdata('message','資料填寫有誤');
       redirect('messages');
@@ -104,7 +114,7 @@ class Messages extends CI_Controller {
 
   public function search(){
     $this->load->library('pagination');
-    $keyword = $this->input->get('keyword');
+
     $per_page = $this->input->get('per_page');
 
     $config['base_url'] = "http://crazyms.com/blogwork/index.php/messages/index?keyword=$keyword";
@@ -168,10 +178,7 @@ class Messages extends CI_Controller {
     $data['pagination'] = $this->pagination->create_links();
     $data['user_login'] = $this->session->userdata('user_login');
     $data['user_id'] = $this->session->userdata('user_id');
-    if($keyword){
-      $data['messages'] = $this->message->get_messages_by_keyword($keyword,$config['per_page'],$offset);
-      $this->load->view('messages',$data);
-    }
+
   }
 
 }

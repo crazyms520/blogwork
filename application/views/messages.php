@@ -35,9 +35,9 @@
           <li><a href="#">我的朋友</a></li>
           <li><a href="#" >尋找使用者</a></li>
         </ul>
-        <form class="navbar-form navbar-left" role="search" action='<?php echo site_url('messages/search'); ?>' method='get'>
+        <form class="navbar-form navbar-left" role="search" action='<?php echo site_url('messages'); ?>' method='get'>
           <div class="form-group">
-            <input type="text" class="form-control" name="keyword" placeholder="關鍵字.."  />
+            <input type="text" class="form-control" name="keyword" placeholder=" 關鍵字" value='<?php echo $keyword;?>' />
           </div>
           <button type="submit" class="btn btn-default ">搜尋</button>
         </form>
