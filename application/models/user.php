@@ -32,4 +32,17 @@
     public function register($data){
       $this->db->insert('users',$data);
     }
+
+    public function get_all_users(){
+      return $this->db->select('*')
+                      ->join('users','friends.friend_id = users.id')
+                      ->from('friends')
+                      ->get()
+                      ->result();
+    }
+
+    public function all_users(){
+      return $this->db->get('users')
+                      ->result();
+    }
   }

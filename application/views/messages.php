@@ -33,7 +33,7 @@
         <ul class="nav navbar-nav">
           <li><a href="<?php echo site_url('messages');?>">我的動態</a></li>
           <li><a href="#">我的朋友</a></li>
-          <li><a href="#" >尋找使用者</a></li>
+          <li><a href="<?php echo site_url('users'); ?>" >尋找使用者</a></li>
         </ul>
         <form class="navbar-form navbar-left" role="search" action='<?php echo site_url('messages'); ?>' method='get'>
           <div class="form-group">
