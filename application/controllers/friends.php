@@ -1,31 +1,28 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Users extends CI_Controller {
+class Friends extends CI_Controller {
+
   function __construct(){
     parent::__construct();
     $this->load->model('user');
-    $this->load->model('message');
     $this->load->model('friend');
     $this->load->library('pagination');
   }
   public function index(){
     $keyword = $this->input->get('keyword');
     $per_page = $this->input->get('per_page');
-    $data['user_id'] = $this->session->userdata('user_id');
+    $user_id = $this->session->userdata('user_id');
+    $data['user'] = $this->user->get_user_by_id($user_id);
     $data['user_login'] = $this->session->userdata('user_login');
-    $user_id  = $this->session->userdata('user_id');
-    // $data['users'] = $this->user->all_users();
-    // $config['base_url'] = 'http://crazyms.com/blogwork/index.php/messages/index?';
-    $config['base_url'] = "http://crazyms.com/blogwork/index.php/users/index?keyword=$keyword";
+    // $friends = $this->friend->get_all_friends($user_id);
+    $config['base_url'] = "http://crazyms.com/blogwork/index.php/friends/index?keyword=$keyword";
     if($keyword){
-      $config['total_rows'] = $this->user->get_total_by_keyword($keyword);
+      $config['total_rows'] = $this->friend->get_friends_by_keyword_total($user_id,$keyword);
     }else{
-      if($user_id){
-        $config['total_rows'] = $this->db->count_all_results('users')-1;
-      }else{
-        $config['total_rows'] = $this->db->count_all_results('users');
-      }
+      // $config['total_rows'] = count($this->friend->get_all_friends($user_id));
+      $config['total_rows'] = $this->friend->get_friends_total($user_id);
     }
+    //
     $config['per_page'] = 3;
     $config['page_query_string'] = TRUE;
     $config['use_page_numbers'] = TRUE;
@@ -34,6 +31,7 @@ class Users extends CI_Controller {
       }else{
         $offset = 0;
       }
+
     //此標籤是放在顯示分頁結果的左側。
     $config['full_tag_open'] = '<ul class="pagination">';
     //此標籤是放在顯示分頁結果的右側。
@@ -77,34 +75,19 @@ class Users extends CI_Controller {
     //分頁數字連結右邊標籤。
     $config['num_tag_close'] = '</li>';
 
-
-
     $this->pagination->initialize($config);
     $this->db->limit($config['per_page'],$offset);
     $data['pagination'] = $this->pagination->create_links();
     if($keyword){
-      $data['users'] = $this->user->get_users_by_keyword($keyword);
+      $data['friends'] = $this->friend->get_friends_by_keyword($user_id,$keyword);
     }else{
-      $data['users'] = $this->user->all_users($user_id);
+      $data['friends'] = $this->friend->get_all_friends($user_id);
     }
-    foreach ($data['users'] as $user){
-      $user->get_friend  = $this->friend->get_friend($user_id,$user->id);
+    foreach ($data['friends'] as $friend){
+      $friend->get_friend  = $this->friend->get_friend($user_id,$friend->friend_id);
     }
     $data['keyword'] = $keyword;
-    $this->load->view('user',$data);
-
-  }
-  public function insert_friends(){
-    $friend_id = $this->input->get('friend_id');
-    $user_id = $this->session->userdata('user_id');
-    if($user_id){
-      $this->friend->creat($user_id,$friend_id);
-      $this->session->set_flashdata('message','新增好友成功');
-      redirect('users');
-    }else{
-      $this->session->set_flashdata('_message','請先登入');
-      redirect('users');
-    }
+    $this->load->view('friends',$data);
   }
   public function delete_friends(){
     $friend_id = $this->input->get('friend_id');
@@ -112,10 +95,11 @@ class Users extends CI_Controller {
     if($user_id){
       $this->friend->delete($user_id,$friend_id);
       $this->session->set_flashdata('message','刪除好友成功');
-      redirect('users');
+      redirect('friends');
     }else{
-      $this->session->set_flashdata('_message','請先登入');
-      redirect('users');
+      $this->session->set_flashdata('message','刪除好友失敗');
+      redirect('friends');
     }
   }
 }
+

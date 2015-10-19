@@ -30,15 +30,9 @@
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav">
 	        <li><a href="<?php echo site_url('messages');?>">我的動態</a></li>
-	        <li><a href="#">我的朋友</a></li>
+	        <li><a href="<?php echo site_url('friends'); ?>">我的朋友</a></li>
 	        <li><a href="<?php echo site_url('users'); ?>">尋找使用者</a></li>
 	      </ul>
-	      <!-- <form class="navbar-form navbar-left" role="search">
-	        <div class="form-group">
-	          <input type="text" class="form-control" placeholder="關鍵字">
-	        </div>
-	        <button type="submit" class="btn btn-default">搜尋</button>
-	      </form> -->
 	      <ul class="nav navbar-nav navbar-right">
 	        <li class="dropdown">
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">設定 <span class="caret"></span></a>

@@ -32,7 +32,7 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li><a href="<?php echo site_url('messages');?>">我的動態</a></li>
-          <li><a href="#">我的朋友</a></li>
+          <li><a href="<?php echo site_url('friends'); ?>">我的朋友</a></li>
           <li><a href="<?php echo site_url('users'); ?>" >尋找使用者</a></li>
         </ul>
         <?php if($user_login === 'YES'){?>
@@ -73,13 +73,6 @@
       <?php if($message = $this->session->flashdata('message')){ ?>
               <div class="alert alert-info" role="alert"><?php echo $message; ?></div>
       <?php } ?>
-       <!--<?php if(!$user){ ?>
-        <div class="alert alert-info" role="alert">登入失敗，帳號密碼有誤</div>
-       <?php }?>
-       <?php if(!$warning2){?>
-        <div class="alert alert-info" role="alert">填寫資料有誤</div>
-      <?php } ?>-->
-
       <div class='row'>
         <div class='col-md-4'></div>
         <div class='col-md-4'>

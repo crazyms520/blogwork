@@ -19,10 +19,42 @@
 
     }
 
-    public function all_friends(){
-      return $this->db->get('friends')
-                      ->result();
+    public function get_friends_by_keyword($user_id,$keyword){
+      return $friends = $this->db->select('*')
+                                 ->where('user_id',$user_id)
+                                 ->like('name',$keyword)
+                                 ->join('friends','friends.friend_id = users.id')
+                                 ->from('users')
+                                 ->get()
+                                 ->result();
     }
+    public function get_friends_by_keyword_total($user_id,$keyword){
+      $friends = $this->db->select('*')
+                          ->where('user_id',$user_id)
+                          ->like('name',$keyword)
+                          ->join('users','friends.friend_id = users.id')
+                          ->from('friends');
+      return $this->db->count_all_results();
+
+    }
+    public function get_all_friends($user_id){
+        return $friends = $this->db->select('*')
+                                 ->where('user_id',$user_id)
+                                 ->join('friends','friends.friend_id = users.id')
+                                 ->order_by ('friends.friend_id')
+                                 ->from('users')
+                                 ->get()
+                                 ->result();
+    }
+
+    public function get_friends_total($user_id){
+       $friends = $this->db->select('*')
+                                 ->where('user_id',$user_id)
+                                 ->join('friends','friends.friend_id = users.id')
+                                 ->from('users');
+      return $this->db->count_all_results();
+    }
+
     public function get_friend($user_id,$friend_id){
      $users = $this->db->where('user_id',$user_id)
                        ->where('friend_id',$friend_id)
@@ -35,4 +67,5 @@
         return false;
       }
     }
+
   }

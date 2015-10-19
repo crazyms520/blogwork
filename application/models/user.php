@@ -41,8 +41,22 @@
                       ->result();
     }
 
-    public function all_users(){
-      return $this->db->get('users')
+    public function all_users($user_id=0){
+      return $this->db->where('id !=',$user_id)
+                      ->get('users')
                       ->result();
     }
+
+    public function get_users_by_keyword($keyword=0){
+      return $this->db->like('name',$keyword,"both")
+                      ->get('users')
+                      ->result();
+    }
+
+    public function get_total_by_keyword($keyword=0){
+      $this->db->like('name',$keyword)
+               ->from('users');
+      return $this->db->count_all_results();
+    }
+
   }
